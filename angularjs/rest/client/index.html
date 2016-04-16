@@ -6,7 +6,10 @@
         <script src="app.js"></script>
     </head>
     <body ng-controller="MyController">
-        <div>
+        <div ng-show="loading">
+            Loading...
+        </div>
+        <div ng-show="!loading">
             <li ng-repeat="user in users">
                 {{user.name}} - {{user.sex}}
             </li>
