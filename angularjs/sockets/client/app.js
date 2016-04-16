@@ -1,16 +1,44 @@
 var myApp = angular.module('myApp', []);
 
-myApp.controller('MyController', function ($scope) {
+myApp.controller('MyController', function ($scope, SocketInterface) {
     $scope.demo = 'This is a demo';
-    var ws = new WebSocket('ws://localhost:8080/events/');
-    ws.onopen = function (event) {
+    $scope.socket = new SocketInterface($scope, 'ws://localhost:8080/events/');
+    $scope.socket.onOpen(function(event) {
         console.log(event);
-        ws.send('hello');
+        $scope.socket.sendMessage('hello');
+    });
+    $scope.socket.onMessage(function(event) {
+        $scope.demo = event.data;
+    });
+});
+
+
+myApp.factory('SocketInterface', function () {
+    var scope;
+    var socket;
+    function Socket($scope, uri) {
+        scope = $scope;
+        socket = new WebSocket(uri);
+        console.log("Socket created: " + socket);
+    }
+    Socket.prototype.onOpen = function(callback) {
+        socket.onopen = function(event) {
+            var args = arguments;
+            scope.$apply(function () {
+                callback.apply(socket, args);
+            });
+        };
     };
-    ws.onmessage = function (event) {
-        console.log(event.data);
-        $scope.$apply(function() {
-            $scope.demo = event.data;
-        });
+    Socket.prototype.onMessage = function (callback) {
+        socket.onmessage = function(event) {
+            var args = arguments;
+            scope.$apply(function () {
+                callback.apply(socket, args);
+            });
+        };
     };
+    Socket.prototype.sendMessage = function (message) {
+        socket.send(message);
+    };
+    return Socket;
 });
