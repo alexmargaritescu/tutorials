@@ -1,0 +1,18 @@
+<html ng-app="myApp">
+    <head>
+        <title>Angular Rest Tutorial</title>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="app.js"></script>
+    </head>
+    <body ng-controller="MyController">
+        <div>
+            <li ng-repeat="user in users">
+                {{user.name}} - {{user.sex}}
+            </li>
+        </div>
+        <div>
+            {{demo}}
+        </div>
+    </body>
+</html>
