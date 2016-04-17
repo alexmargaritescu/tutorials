@@ -9,9 +9,9 @@ myApp.controller('MyController', function ($scope, SocketInterface) {
     });
     $scope.socket.onMessage(function(event) {
         $scope.demo = event.data;
+        $scope.socket.close();
     });
 });
-
 
 myApp.factory('SocketInterface', function () {
     var scope;
@@ -39,6 +39,9 @@ myApp.factory('SocketInterface', function () {
     };
     Socket.prototype.sendMessage = function (message) {
         socket.send(message);
+    };
+    Socket.prototype.close = function (message) {
+        socket.close();
     };
     return Socket;
 });

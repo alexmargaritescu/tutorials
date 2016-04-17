@@ -18,7 +18,6 @@ public class EventServer {
             ResourceHandler resourceHandler = new ResourceHandler();
             resourceHandler.setResourceBase("../client/");
             resourceHandler.setWelcomeFiles(new String[]{ "index.html" });
-            resourceHandler.setDirectoriesListed(true);
             resourceHandler.setMinMemoryMappedContentLength(-1);
             HandlerList handlers = new HandlerList();
             handlers.setHandlers(new Handler[] { resourceHandler, context });
