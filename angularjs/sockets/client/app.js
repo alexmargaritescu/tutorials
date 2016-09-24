@@ -2,16 +2,16 @@ var myApp = angular.module('myApp', []);
 
 myApp.controller('MyController', function ($scope, SocketInterface) {
     $scope.demo = 'This is a demo';
-    $scope.socket = new SocketInterface($scope, 'ws://localhost:8080/events/');
+    $scope.socket = new SocketInterface($scope, 'ws://' + location.host + '/events/');
     $scope.socket.onOpen(function(event) {
         console.log(event);
         $scope.socket.sendMessage('hello');
     });
     $scope.socket.onMessage(function(event) {
         $scope.demo = event.data;
-        $scope.socket.close();
     });
 });
+
 
 myApp.factory('SocketInterface', function () {
     var scope;
@@ -35,13 +35,11 @@ myApp.factory('SocketInterface', function () {
             scope.$apply(function () {
                 callback.apply(socket, args);
             });
+            ws.close();
         };
     };
     Socket.prototype.sendMessage = function (message) {
         socket.send(message);
-    };
-    Socket.prototype.close = function (message) {
-        socket.close();
     };
     return Socket;
 });
